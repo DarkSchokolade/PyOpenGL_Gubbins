@@ -4,6 +4,8 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 
+import random
+
 verticies = (
     (1, -1, -1),
     (1, 1, -1),
@@ -53,13 +55,14 @@ colors = (
     (0,1,1),
     )
 
+
 def Cube():
 
     glBegin(GL_QUADS)
     for surface in surfaces:
-        x=0
+        x = 0
         for vertex in surface:
-            x+=1
+            x += 1
             glColor3fv(colors[x])
             glVertex3fv(verticies[vertex])
     glEnd()
@@ -78,7 +81,7 @@ def main():
 
     gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 
-    glTranslatef(0.0,0.0, -50)
+    glTranslatef(random.randrange(-5,5), 0.0, -50)
 
     # glRotatef(25, 2, 1, 0)
 
@@ -120,13 +123,14 @@ def main():
             object_passed= True
 
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-        glTranslatef(0, 0, 0.2)
+        # speed of player
+        glTranslatef(0, 0, 0.5)
         Cube()
         pygame.display.flip()
         pygame.time.wait(10)
 
 
-for i in range(6):
+for i in range(10):
     main()
 pygame.quit()
 quit()
