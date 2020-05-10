@@ -19,39 +19,67 @@ from OpenGL.GLU import *
 # GLUT doesn't work
 
 
-
 def draw(slices, stacks):
-    t = time.time()%1000
-    angle=t*90
+    t = time.time() % 1000
+    angle = t*90
     quad = gluNewQuadric()
-
 
     glColor3f(0.5, 1.0, 0.4)
 
     glPushMatrix()
-    gluQuadricDrawStyle(quad,GLU_LINE)  # !!! un-comment to see edges for smooth shading in wireframe mode
-    glTranslatef(-2.4, 1.2, -6)
+    glTranslatef(-2.4, 1.5, -6)
     glRotatef(45,1,0,0)
     glRotatef(angle,0,0,1)
     gluSphere(quad, 1, slices, stacks)  # quads, radius, slices, stacks
     glPopMatrix()
 
     glPushMatrix()
-    glTranslatef(1, 1.2, -6)
+    glTranslatef(1, 1.5, -6)
     glRotatef(-60, 1, 0.2, 0)
     glRotatef(angle, 0, 0, 1)
     gluCylinder(quad, 1.5, 0.1, 2, slices, stacks)  # quads, base, top, height, slices, stacks
     glPopMatrix()
 
     glPushMatrix()
-    glTranslatef(4.4, 1.2, -6)
+    glTranslatef(4.4, 1.5, -6)
     # glRotatef(-60, 1, 0.2, 0)
     glRotatef(-angle, 0, 0, 1)
     gluPartialDisk(quad, 0.5, 1, slices, stacks, 0, 270)    # quad, inner, outer, slices, loops, start angle, sweep angle
     glPopMatrix()
 
     glPushMatrix()
-    glTranslatef(6.4, 1.2, -6)
+    glTranslatef(6.4, 1.5, -6)
+    # glRotatef(-60, 1, 0.2, 0)
+    glRotatef(-angle, 0, 1, 1)
+    gluDisk(quad, 0.5, 1, slices, stacks)  # quad, inner, outer, slices, loops
+    glPopMatrix()
+
+    # Wire Frame Mode Starts From Here
+    gluQuadricDrawStyle(quad, GLU_LINE)
+
+    glPushMatrix()
+    glTranslatef(-2.4, -1.2, -6)
+    glRotatef(45, 1, 0, 0)
+    glRotatef(angle, 0, 0, 1)
+    gluSphere(quad, 1, slices, stacks)  # quads, radius, slices, stacks
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(1, -1.2, -6)
+    glRotatef(-60, 1, 0.2, 0)
+    glRotatef(angle, 0, 0, 1)
+    gluCylinder(quad, 1.5, 0.1, 2, slices, stacks)  # quads, base, top, height, slices, stacks
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(4.4, -1.2, -6)
+    # glRotatef(-60, 1, 0.2, 0)
+    glRotatef(-angle, 0, 0, 1)
+    gluPartialDisk(quad, 0.5, 1, slices, stacks, 0, 270)  # quad, inner, outer, slices, loops, start angle, sweep angle
+    glPopMatrix()
+
+    glPushMatrix()
+    glTranslatef(6.4, -1.2, -6)
     # glRotatef(-60, 1, 0.2, 0)
     glRotatef(-angle, 0, 1, 1)
     gluDisk(quad, 0.5, 1, slices, stacks)  # quad, inner, outer, slices, loops
