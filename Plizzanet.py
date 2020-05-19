@@ -10,14 +10,18 @@ import random
 
 # GLUT doesn't work
 
+# color and other variables for easy modification
+planetColor = (0.0, 0.6, 0.7)
+partialDiskColor=(0.7, 0.4, 0.0)
 
+# solid Draw
 def draw(slices, stacks):
 
     t = time.time() % 1000
     angle = t*90
     quad = gluNewQuadric()
 
-    glColor3f(0.4, 0.1, 0.8)
+    glColor3fv(planetColor)
 
     # planet
     glPushMatrix()
@@ -27,8 +31,8 @@ def draw(slices, stacks):
     gluSphere(quad, 2, slices, stacks)  # quads, radius, slices, stacks
     glPopMatrix()
 
-
-
+    # partial disk to demonstrate overlapping
+    glColor3fv(partialDiskColor)
     glPushMatrix()
     glTranslatef(4.4, 1.5, -6)
     # glRotatef(-60, 1, 0.2, 0)
@@ -36,7 +40,8 @@ def draw(slices, stacks):
     gluPartialDisk(quad, 0.5, 1, slices, stacks, 0, 270)    # quad, inner, outer, slices, loops, start angle, sweep angle
     glPopMatrix()
 
-    glColor3f(1.0, 0.8, 0.2)
+    # Rings
+    glColor3f(1.0, 0.8, 0.2)        # controles the color of the rings
     glPushMatrix()
     glTranslatef(1.8, 1.5, -6)
     # glRotatef(-60, 1, 0.2, 0)
@@ -44,42 +49,59 @@ def draw(slices, stacks):
     gluDisk(quad, 2.2, 2.7, slices, stacks)  # quad, inner, outer, slices, loops
     glPopMatrix()
 
-    # glColor3f(0.7, 0.5, 0.0)
+    # glColor3f(0.7, 0.5, 0.0)      # If you need to change the color of the other ring
     glPushMatrix()
     glTranslatef(1.8, 1.5, -6)
-    glRotatef(-60, 1, 0.2, 0)
-    glRotatef(-angle, 1, 0, 1)
+    glRotatef(-60, 1, 0.2, 0)       # pre rotated by an angle
+    glRotatef(-angle, 1, 0, 1)      # contineous rotation of the ring
     gluDisk(quad, 2.2, 2.7, slices, stacks)  # quad, inner, outer, slices, loops
     glPopMatrix()
 
-    # bad stars
-    # try snow flakes
-    # glColor3f(1,1,1)
-    #
-    # glPointSize(random.uniform(13,58))
-    # glBegin(GL_POINTS)
-    # # x =random.uniform(0,3)
-    # # y = random.uniform(0, 3)
-    # # z = random.uniform(0, 3)
-    # # glVertex3f(x, y, z)
-    # glVertex3f(0,1,0)
-    # glEnd()
+# xray/Wireframe mode Draw
+def xrayDraw(slices, stacks):
+    t = time.time() % 1000
+    angle = t * 90
+    quad = gluNewQuadric()
+
+    glColor3fv(planetColor)
+
+    gluQuadricDrawStyle(quad, GLU_LINE)
+    # planet
+    glPushMatrix()
+    glTranslatef(1.8, 1.5, -6)
+    glRotatef(45, 1, 0, 0)
+    glRotatef(angle, 0, 0, 1)
+    gluSphere(quad, 2, slices, stacks)  # quads, radius, slices, stacks
+    glPopMatrix()
+
+    # space station
+    glColor3fv(partialDiskColor)
+    glPushMatrix()
+    glTranslatef(4.4, 1.5, -6)
+    # glRotatef(-60, 1, 0.2, 0)
+    glRotatef(-angle, 0, 0, 1)
+    gluPartialDisk(quad, 0.5, 1, slices, stacks, 0, 270)  # quad, inner, outer, slices, loops, start angle, sweep angle
+    glPopMatrix()
+
+    # Rings
+    glColor3f(1.0, 0.8, 0.2)  # controles the color of the rings
+    glPushMatrix()
+    glTranslatef(1.8, 1.5, -6)
+    # glRotatef(-60, 1, 0.2, 0)
+    glRotatef(-angle, 0, 1, 1)
+    gluDisk(quad, 2.2, 2.7, slices, stacks)  # quad, inner, outer, slices, loops
+    glPopMatrix()
+
+    # glColor3f(0.7, 0.5, 0.0)      # If you need to change the color of the other ring
+    glPushMatrix()
+    glTranslatef(1.8, 1.5, -6)
+    glRotatef(-60, 1, 0.2, 0)  # pre rotated by an angle
+    glRotatef(-angle, 1, 0, 1)  # contineous rotation of the ring
+    gluDisk(quad, 2.2, 2.7, slices, stacks)  # quad, inner, outer, slices, loops
+    glPopMatrix()
 
 
-
-
-vertices=((2,3,0),(1,1,1),(-1,1,1))
-def stars(vertices):
-    glColor3f(1, 1, 1)
-    glPointSize(13)
-    glBegin(GL_POINTS)
-    for vertex in range(len(vertices)):
-        glVertex3fv(vertices[vertex])
-    glVertex3f(2, 2, 0)
-    glEnd()
-
-
-
+# light settings
 light_ambient = [0.0, 0.0, 0.0, 1.0]
 light_diffuse = [1.0, 1.0, 1.0, 1.0]
 light_specular = [1.0, 1.0, 1.0, 1.0]
@@ -92,8 +114,10 @@ high_shininess = [100.0]
 
 
 def main():
-    slices = 10
-    stacks = 10
+    slices = 7
+    stacks = 7
+
+    xrayButton = 1
 
     pygame.init()
     display = (800, 600)
@@ -117,15 +141,36 @@ def main():
                 if event.key == pygame.K_DOWN and (slices > 3 and stacks > 3):
                     slices -= 1
                     stacks -= 1
+                if event.key == pygame.K_x:
+                    xrayButton = xrayButton+1
 
+                # camera controles
+                if event.key == pygame.K_a:
+                    glTranslatef(0.5, 0, 0)
+                if event.key == pygame.K_d:
+                    glTranslatef(-0.5, 0, 0)
 
-        #glRotatef(1, 3, 1, 1)
+                if event.key == pygame.K_w:
+                    glTranslatef(0, -0.5, 0)
+                if event.key == pygame.K_s:
+                    glTranslatef(0, 0.5, 0)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 4:
+                    glTranslatef(0, 0, 0.5)
+                if event.button == 5:
+                    glTranslatef(0, 0, -0.5)
+
+        # glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glColor3f(1.0, 1.0, 3.0)
-        #drawing begins here
-        draw(slices, stacks)
-        stars(vertices)
-        #background color
+
+        # drawing begins here
+        if(xrayButton % 2):
+            draw(slices, stacks)
+        else:
+            xrayDraw(slices, stacks)
+
+        # background color (space color)
         glClearColor(0.0, 0.0, 0.12, 1)
         glEnable(GL_CULL_FACE)
         glCullFace(GL_BACK)
@@ -151,5 +196,6 @@ def main():
         pygame.display.flip()
         pygame.time.wait(10)
 
-angle=0
+
+angle = 0
 main()
