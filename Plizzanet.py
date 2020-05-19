@@ -100,6 +100,30 @@ def xrayDraw(slices, stacks):
     gluDisk(quad, 2.2, 2.7, slices, stacks)  # quad, inner, outer, slices, loops
     glPopMatrix()
 
+def UFO(xyz_pos):
+    t = time.time() % 1000
+    angle = t * 90
+
+    quad = gluNewQuadric()
+
+    glColor3f(0.4, 0.1, 0.4)
+    glPushMatrix()
+    glTranslatef(1, 1.5, -8)    #was -8
+    glTranslatef(xyz_pos, xyz_pos, -xyz_pos)
+    glRotatef(45, 1, 0, 0)
+    glRotatef(angle, 0, 0, 1)
+    gluSphere(quad, 1, 17, 17)  # quads, radius, slices, stacks
+    # glRotatef(70, 1, 0, 0)
+    glPopMatrix()
+
+    glColor3f(0.4, 0.8, 0.2)
+    glPushMatrix()
+    glTranslatef(1, 0.56, -8)
+    glTranslatef(xyz_pos, xyz_pos, -xyz_pos)
+    glRotatef(-90, 1, 0.0, 0)
+    glRotatef(angle, 0, 0, 1)
+    gluCylinder(quad, 1.5, 0.74, 1.6, 17, 17)  # quads, base, top, height, slices, stacks
+    glPopMatrix()
 
 # light settings
 light_ambient = [0.0, 0.0, 0.0, 1.0]
@@ -118,6 +142,9 @@ def main():
     stacks = 7
 
     xrayButton = 1
+    xyz_pos = 0.1
+    movingDown = False
+    z_pos = -8
 
     pygame.init()
     display = (800, 600)
@@ -159,6 +186,18 @@ def main():
                     glTranslatef(0, 0, 0.5)
                 if event.button == 5:
                     glTranslatef(0, 0, -0.5)
+        # logic to move the UFO
+        if(movingDown):
+            if(xyz_pos > -4):
+                xyz_pos = xyz_pos - 0.04
+            else:
+                movingDown = False
+
+        else:
+            if(xyz_pos < 8):
+                xyz_pos = xyz_pos + 0.04
+            else:
+                movingDown = True
 
         # glRotatef(1, 3, 1, 1)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -169,6 +208,7 @@ def main():
             draw(slices, stacks)
         else:
             xrayDraw(slices, stacks)
+        UFO(xyz_pos)
 
         # background color (space color)
         glClearColor(0.0, 0.0, 0.12, 1)
