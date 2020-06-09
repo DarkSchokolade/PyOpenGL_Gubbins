@@ -65,7 +65,7 @@ def xrayDraw(slices, stacks):
 
     glColor3fv(planetColor)
 
-    gluQuadricDrawStyle(quad, GLU_LINE)
+    gluQuadricDrawStyle(quad, GLU_LINE)     # WireFrame Mode
     # planet
     glPushMatrix()
     glTranslatef(1.8, 1.5, -6)
@@ -148,6 +148,7 @@ def main():
 
     pygame.init()
     display = (800, 600)
+    pygame.display.set_caption("OpenGL --> Lighting and Smooth Shading Demonstration")
     pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
 
     glMatrixMode(GL_PROJECTION)
