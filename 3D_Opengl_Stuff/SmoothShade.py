@@ -6,6 +6,11 @@ written in python because C++ did not work for me
 Spinning primitives
 Press UP ARROW or DOWN ARROW to adjust the slices and stacks of the primitive shapes
 
+This was a team project
+Written by SUHAS.K.SHETTY
+Together with HARIHARAN.PARTHIBAN
+Quarantine 2020
+
 Written and modified by SUHAS.K.SHETTY
 """
 

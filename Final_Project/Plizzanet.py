@@ -1,3 +1,24 @@
+"""
+Opengl project demonstrating Lighting and Smooth Shading
+Using GLU primitive shapes
+Written in python because C++ did not work for me
+PyOpengl and Pygame are the anly two requirements to run the program
+
+********CONTROLS********
+* Press UP ARROW or DOWN ARROW to adjust the slices and stacks of the primitive shapes .
+                [Controles the smoothness of the object]
+* A,W,S,D to move around the viewport.
+* Mouse Scroll to zoom in and out.
+* X to enter X-ray mode [wireframe mode].
+************************
+
+****************CREDITS****************
+* This was a team project            
+* Written by SUHAS.K.SHETTY          
+* Together with HARIHARAN.PARTHIBAN  
+* Quarantine 2020                    
+***************************************
+"""
 
 import time
 import pygame
